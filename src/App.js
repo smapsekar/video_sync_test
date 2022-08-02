@@ -150,9 +150,7 @@ export default function App() {
       "duration",
       refsById["vid_2"].current.duration,
       "CurrentTime",
-      refsById["vid_2"].current.currentTime,
-      "readState",
-      refsById["vid_2"].current.media.readyState
+      refsById["vid_2"].current.currentTime
     );
     console.log("Factor:", percentage1 / percentage2);
     //}
