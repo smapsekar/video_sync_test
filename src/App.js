@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import "./styles.css";
 export default function App() {
   let result;
@@ -51,6 +51,7 @@ export default function App() {
     let seekTime = Math.abs(
       data[1].recordingStartTimestamp - data[0].recordingStartTimestamp
     );
+
     if (
       refsById["vid_2"].current.currentTime === 0 &&
       refsById["vid_1"].current.currentTime === 0
@@ -149,7 +150,9 @@ export default function App() {
       "duration",
       refsById["vid_2"].current.duration,
       "CurrentTime",
-      refsById["vid_2"].current.currentTime
+      refsById["vid_2"].current.currentTime,
+      "readState",
+      refsById["vid_2"].current.media.readyState
     );
     console.log("Factor:", percentage1 / percentage2);
     //}
@@ -174,6 +177,10 @@ export default function App() {
   const onRateChanged = (event) => {
     console.log("onRateChanged", event);
   };
+
+  // const postStallEvent = (event) => {
+  //     let currentTimeStampOfPlayer2 = initialTimeStamp;
+  // }
   return (
     <div className="App">
       <h1>Sync two videos</h1>
@@ -199,8 +206,8 @@ export default function App() {
                   ref={refsById[video.source]}
                   key={`${video.source}_${i}_${video.recordingStartTimestamp}`}
                   controls
-                  width="30%"
-                  height="30%"
+                  width="50%"
+                  height="50%"
                   src={video.downloadUrl}
                   onEnded={handleOnEnded}
                   onPlaying={onPlaying}
