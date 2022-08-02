@@ -37,7 +37,7 @@ export default function App() {
     event.preventDefault();
     fetchData(inputJson);
   };
-  //console.log(data);
+
   const refsById = useMemo(() => {
     const refs = {};
     data.length > 0 &&
@@ -58,7 +58,9 @@ export default function App() {
     ) {
       refsById["vid_1"].current.currentTime = seekTime / 1000;
     }
+
     refsById["vid_1"].current.play();
+
     refsById["vid_2"].current.play();
   };
   const handlePause = (event) => {
@@ -96,9 +98,6 @@ export default function App() {
       refsById["vid_1"].current.currentTime =
         Math.round(percentage1 * refsById["vid_1"].current?.duration) / 100;
     }
-
-    //console.log("currentTimeSet to of vid1", refsById["vid_1"].current.currentTime);
-    //console.log("currentTimeSet to of vid2", refsById["vid_2"].current.currentTime);
   };
   const onPlaying = (e) => {
     //console.log("onPlaying", e);
@@ -109,6 +108,7 @@ export default function App() {
   };
   const onStalled = (event) => {
     console.log("onStalled Failed to fetch data, but trying.", event.target.id);
+    console.log("networkState in stalled event", event.target.networkState);
     if (event.target.id === "vid_1") {
       console.log("vid1 stalled");
       refsById["vid_1"].current.play();
@@ -127,23 +127,12 @@ export default function App() {
         refsById["vid_1"].current.duration) *
         100
     );
-    //setVideoOnePercentPlayed(percentage1);
-    console.log(
-      "Video1 played in percentage",
-      percentage1,
-      "duration",
-      refsById["vid_1"].current.duration,
-      "CurrentTime",
-      refsById["vid_1"].current.currentTime
-    );
-    //}
     //if (event.target.id === "vid_2") {
     percentage2 = Math.round(
       (refsById["vid_2"].current?.currentTime /
         refsById["vid_2"].current.duration) *
         100
     );
-    //setVideoTwoPercentPlayed(percentage2);
     console.log(
       "Video2 played in percentage",
       percentage2,
@@ -153,19 +142,13 @@ export default function App() {
       refsById["vid_2"].current.currentTime
     );
     console.log("Factor:", percentage1 / percentage2);
-    //}
-
-    //console.log("prevOneVideoPrecentRef",prevOneVideoPrecentRef.current)
-    //console.log("prevTwoVideoPrecentRef",prevTwoVideoPrecentRef.current)
-    // console.log(
-    //   "percentage VideoPlayed video2",
-    //   "video1:",
-    //   percentage1,
-    //   "video2:",
-    //   percentage2
-    // );
-    // console.log("Factor video2/video1", percentage2 / percentage1);
-    //console.log("Factor video1/video2", percentage1/percentage2);
+    console.log(
+      "percentage VideoPlayed video2",
+      "video1:",
+      percentage1,
+      "video2:",
+      percentage2
+    );
   };
 
   const onPause = (event) => {
@@ -179,6 +162,9 @@ export default function App() {
   // const postStallEvent = (event) => {
   //     let currentTimeStampOfPlayer2 = initialTimeStamp;
   // }
+  const onLoadedData = (event) => {
+    console.log("onLoadedData", event.target.networkState);
+  };
   return (
     <div className="App">
       <h1>Sync two videos</h1>
@@ -216,6 +202,7 @@ export default function App() {
                   preload
                   onRateChange={onRateChanged}
                   id={`${video.source}`}
+                  onLoadedData={onLoadedData}
                 />
               </>
             );
